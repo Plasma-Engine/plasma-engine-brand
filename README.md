@@ -1,36 +1,81 @@
 # Plasma Engine Brand
 
-Data collectors, analytics, and reporting pipelines for Plasma Engine brand monitoring.
+## Overview
 
-## Components
+**Plasma Engine Brand** is the brand monitoring and reputation management service. It provides:
 
-- Ingestion: Tavily, EXA, social APIs (Twitter/X, Reddit, YouTube, TikTok)
-- Storage: Postgres, SQLite, S3-compatible object storage
-- Analytics: Sentiment, topics, share-of-voice, trend detection
-- Reporting: Jinja templates for executive summaries and quarterly reports
+- 📊 **Multi-Source Monitoring**: Social media, news, forums, reviews
+- 📈 **Sentiment Analysis**: Real-time brand perception tracking
+- 🔔 **Alert System**: Configurable triggers for brand mentions
+- 📱 **Platform Integration**: X/Twitter, LinkedIn, Reddit, Google
+- 📉 **Trend Detection**: Emerging topics and viral content
+- 📋 **Reporting**: Automated dashboards and insights
 
-## CI
+## Tech Stack
 
-Uses shared workflows for lint/test and security scanning ([ci.yml](.github/workflows/ci.yml)). CodeRabbit is configured as an automatic reviewer.
+- **Language**: Python 3.11
+- **Framework**: FastAPI
+- **Data Pipeline**: Apache Beam / Prefect
+- **Stream Processing**: Kafka / Redis Streams
+- **ML/NLP**: Transformers, spaCy
+- **Database**: PostgreSQL + TimescaleDB
+- **Cache**: Redis
+- **Search**: Elasticsearch
 
-## Local Setup
+## Quick Start
 
 ```bash
-git clone https://github.com/xkonjin/plasma-engine-brand.git
-cd plasma-engine-brand
+# Install dependencies
+pip install -r requirements.txt
 
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt  # placeholder until scaffolding added
+# Set up environment
+cp .env.example .env
+
+# Run migrations
+alembic upgrade head
+
+# Start development server
+uvicorn app.main:app --reload
+
+# Run tests
+pytest
+
+# Start data collectors
+python -m app.collectors.start
 ```
 
-Ensure the shared Compose stack is running for Redis/Postgres support (see development handbook).
+## Architecture
 
-## Contribution Checklist
+```
+Data Sources → Collectors → Stream Processing → Analysis → Storage
+      ↓            ↓              ↓                ↓          ↓
+   APIs/RSS    Rate Limit    Sentiment/NER    Insights   Dashboard
+```
 
-- [ ] Issue opened and linked to Program board (PE-XX)
-- [ ] Test coverage updated for collectors/analytics modules
-- [ ] Report templates validated before merge
-- [ ] Docs updated (README/reporting guide)
+## Key Features
 
-Refer to the [Development Handbook](../plasma-engine-shared/docs/development-handbook.md) for detailed environment steps.
+- **Real-time Processing**: Sub-minute latency for critical mentions
+- **Historical Analysis**: Trend comparison and pattern recognition
+- **Competitor Tracking**: Side-by-side brand comparison
+- **Crisis Detection**: Anomaly detection for reputation threats
+- **Custom Metrics**: Configurable KPIs and scoring
+
+## Integrations
+
+- **Social**: X/Twitter API, LinkedIn API, Reddit API
+- **News**: NewsAPI, Google News RSS
+- **Reviews**: Google My Business, Trustpilot
+- **Forums**: Discord webhooks, Slack monitoring
+
+## Development
+
+See [Development Handbook](../plasma-engine-shared/docs/development-handbook.md) for guidelines.
+
+## CI/CD
+
+This repository uses GitHub Actions for CI/CD. All PRs are automatically:
+- Linted and tested
+- Security scanned
+- Reviewed by CodeRabbit
+
+See `.github/workflows/ci.yml` for details.
